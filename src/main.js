@@ -2,12 +2,19 @@
 require('dotenv').config()
 
 const express = require('express')
-
+const { v4: uuidv4 } = require('uuid')
+const { SESV2 } = require('aws-sdk')
 const cookieParser = require('cookie-parser')
 const { compare } = require('bcrypt')
 const { getPeopleCollection } = require('../db')
-const { getAccessTokenForUserId, setAccessTokenCookie } = require('./auth/auth')
+const {
+  getAccessTokenForUserId,
+  setAccessTokenCookie,
+  encryptPassword,
+} = require('./auth/auth')
 const authMiddleware = require('./auth/authMiddleware')
+const { restart } = require('nodemon')
+
 const router = express.Router()
 
 const app = express()
@@ -20,7 +27,10 @@ app.use('/public', express.static('src/public'))
 app.set('views', 'src/views')
 app.set('view engine', 'pug')
 
-/*  */
+// @ts-ignore
+const { HOST } = process.env
+// @ts-ignore
+const ses = new SESV2()
 
 /**
  * @param {Object.<string, *>} query
@@ -55,6 +65,12 @@ function redirectWithMsg({ res, dest, error, info }) {
 
 // 홈 화면 라우팅
 router.get('/', async (req, res) => {
+  const prebookingPeriod = new Date('2021-11-12T13:00')
+  const today = new Date()
+  if (today < prebookingPeriod) {
+    res.render('prebooking')
+    return
+  }
   if (req.user) {
     res.render('home')
   } else {
@@ -62,7 +78,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-//
+// 로그인 요청 라우팅
 router.post('/sign-in', async (req, res) => {
   // 비정상적인 접근 차단
   if (!req.body) {
@@ -123,9 +139,124 @@ router.post('/sign-in', async (req, res) => {
   }
 })
 
+/* // 이메일 인증 라우터
+router.get('/verify-email', async (req, res) => {
+  const { code } = req.query
+  if (!code) {
+    res.status(400).end()
+    return
+  }
+
+  const users = await getPeopleCollection()
+  const user = await users.findOne({ emailVerificationCode: code })
+
+  if (!user) {
+    console.log(`code : ${code}`)
+    console.log(users)
+    res.status(400).end()
+    return
+  }
+  await users.updateOne(
+    {
+      id: user.id,
+    },
+    {
+      $set: {
+        virified: true,
+      },
+    }
+  )
+  redirectWithMsg({
+    dest: '/',
+    res,
+    info: '이메일이 인증되었습니다',
+  })
+}) */
+
+router.post('/sign-up', async (req, res) => {
+  const users = await getPeopleCollection()
+  const { email, password } = req.body
+
+  // 입력 없음
+  if (!email || !password) {
+    redirectWithMsg({
+      dest: '/',
+      error: '이메일과 비밀번호를 모두 입력해야 합니다',
+      res,
+    })
+    return
+  }
+
+  // 조회되지 않는 유저
+  const existingUser = await users.findOne({
+    email,
+  })
+  if (existingUser) {
+    redirectWithMsg({
+      dest: '/',
+      error: '같은 이메일의 유저가 이미 존재합니다',
+      res,
+    })
+    return
+  }
+  /* 
+  // 암호화 된 아이디 생성
+  const newUserId = uuidv4()
+  const emailVerificationCode = uuidv4()
+  await ses
+    .sendEmail({
+      Content: {
+        Simple: {
+          Subject: {
+            Data: '이메일 인증 요청',
+            Charset: 'UTF-8',
+          },
+          Body: {
+            Text: {
+              Data: `다음 링크를 눌러 이메일 인증을 진행해주세요.<br>https://${HOST}/verify-email?code=${emailVerificationCode}`,
+              Charset: 'UTF-8',
+            },
+          },
+        },
+      },
+      Destination: {
+        // 메일 전송 받을 주소
+        ToAddresses: [email],
+      },
+      // 메일 전송 할 주소
+      FromEmailAddress: 'noreply@gameisboring.com',
+    })
+    .promise()
+ */
+  await users.insertOne({
+    email,
+    password: await encryptPassword(password),
+    virified: false,
+  })
+
+  setAccessTokenCookie(res, await getAccessTokenForUserId(email))
+  redirectWithMsg({
+    dest: '/',
+    info: '등록이 완료되었습니다',
+    res,
+  })
+})
+
+// 로그아웃
 router.get('/logout', (req, res) => {
   res.clearCookie('access_token')
   res.redirect('/')
+})
+
+router.get('/admin', async (req, res) => {
+  const peopleCol = await getPeopleCollection()
+
+  const peopleCursor = peopleCol.find({})
+  const people = await peopleCursor.toArray()
+
+  console.log(people)
+
+  res.render('admin', people)
 })
 
 const PORT = 3000

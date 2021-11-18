@@ -1,0 +1,27 @@
+.primary-btn {
+  display: flex;
+  width: 100%;
+  height: 56px;
+  border-radius: 12px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 16px;
+}
+
+.primary-btn .logo {
+  justify-self: flex-start;
+  width: 32px;
+}
+
+.red-btn {
+  background-color: rgb(220, 38, 38);
+  color: white;
+}
+
+.text {
+  flex-grow: 1;
+  text-align: center;
+}

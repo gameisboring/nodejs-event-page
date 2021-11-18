@@ -1,5 +1,6 @@
 // @ts-check
 
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { SERVER_SECRET } = process.env
 
@@ -28,6 +29,23 @@ async function verifyJWT(token) {
 }
 
 /**
+ * @param {string} password
+ * @returns {Promise<string>}
+ */
+async function encryptPassword(password) {
+  console.log('encryptPassword')
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, 12, (err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+/**
  * @param {string} userId
  */
 async function getAccessTokenForUserId(userId) {
@@ -47,6 +65,7 @@ function setAccessTokenCookie(res, token) {
 module.exports = {
   getAccessTokenForUserId,
   setAccessTokenCookie,
+  encryptPassword,
   signJWT,
   verifyJWT,
 }
