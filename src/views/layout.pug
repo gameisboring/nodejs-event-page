@@ -1,0 +1,12 @@
+html
+    head
+        title 제목을을을을 입력하세요
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet")
+        script(src="https://code.jquery.com/jquery-1.11.3.min.js")
+    body
+        block contents 
+        script.
+            window.APP_CONFIG = JSON.parse("!{APP_CONFIG_JSON}")
+        script(src="../public/toast.js")
+        block scripts
