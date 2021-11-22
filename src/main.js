@@ -254,9 +254,7 @@ router.get('/admin', async (req, res) => {
   const peopleCursor = peopleCol.find({})
   const people = await peopleCursor.toArray()
 
-  console.log(people)
-
-  res.render('admin', people)
+  res.render('admin', { peopleArray: people })
 })
 
 const PORT = 3000

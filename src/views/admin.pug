@@ -3,4 +3,9 @@ extends layout.pug
 block contents 
     div.p-8
         h1.text-4xl.font-bold.text-center.mt-8 관리자 화면 입니다 👋
+    each user in peopleArray
+        div.m-4.p-4.rounded-lg.bg-blue-400.text-white
+            div #{user.email}
+            div #{user.first_access}
+    
 block scripts
