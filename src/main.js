@@ -172,6 +172,9 @@ router.get('/verify-email', async (req, res) => {
     info: '이메일이 인증되었습니다',
   })
 }) */
+router.get('/sign-up', async (req, res) => {
+  res.render('sign-up')
+})
 
 router.post('/sign-up', async (req, res) => {
   const users = await getPeopleCollection()

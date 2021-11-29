@@ -5,12 +5,25 @@
 
   function addMessageBlock(message, className) {
     const div = document.createElement('div')
-    div.className = `absolute flex top-4 left-4 right-4 rounded text-base text-white items-center justify-center pointer-cursor text-center p-4 ${className}`
-    div.innerText = message
-    div.addEventListener('click', () => {
-      document.body.removeChild(div)
-    })
+    div.id = 'toast'
+
+    const icon = document.createElement('div')
+    icon.id = 'toast-icon'
+    icon.innerText = 'icon'
+    div.appendChild(icon)
+
+    const desc = document.createElement('div')
+    desc.id = 'desc'
+    desc.innerText = message
+    div.appendChild(desc)
+
     document.body.appendChild(div)
+
+    div.className = `show ${className}`
+
+    setTimeout(() => {
+      div.className = div.className.replace('show', '')
+    }, 5000)
   }
 
   if (info) {

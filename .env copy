@@ -1,0 +1,6 @@
+MONGO_PASSWORD=1111
+MONGO_CLUSTER=cluster0.8mumx.mongodb.net
+MONGO_USER=root-user
+MONGO_DBNAME=event
+SERVER_SECRET=potato
+HOST=localhost:3000
