@@ -125,6 +125,17 @@ router.post('/sign-in', async (req, res) => {
     const token = await getAccessTokenForUserId(existingUser.email)
     setAccessTokenCookie(res, token)
 
+    await users.updateOne(
+      {
+        email: existingUser.email,
+      },
+      {
+        $set: {
+          last_access: Date(),
+        },
+      }
+    )
+
     redirectWithMsg({
       res,
       dest: '/',
@@ -172,6 +183,7 @@ router.get('/verify-email', async (req, res) => {
     info: '이메일이 인증되었습니다',
   })
 }) */
+
 router.get('/sign-up', async (req, res) => {
   res.render('sign-up')
 })
@@ -231,6 +243,7 @@ router.post('/sign-up', async (req, res) => {
     })
     .promise()
  */
+
   await users.insertOne({
     email,
     password: await encryptPassword(password),
@@ -251,6 +264,7 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+// 관리자 페이지
 router.get('/admin', async (req, res) => {
   const peopleCol = await getPeopleCollection()
 

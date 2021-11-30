@@ -6,6 +6,9 @@ block contents
     each user in peopleArray
         div.m-4.p-4.rounded-lg.bg-blue-400.text-white
             div #{user.email}
-            div #{user.first_access}
+            if user.last_access
+                div #{user.last_access}
+            if user.first_access
+                div #{user.first_access}
     
 block scripts

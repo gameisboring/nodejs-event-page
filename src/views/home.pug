@@ -1,7 +1,41 @@
 extends layout.pug
 
 block contents 
-    div.p-8.text-center
-        h1.text-4xl.font-bold.mt-8 홈 화면 입니다 👋
-        button(onclick="location.href='/logout'").mt-8.bg-blue-500.text-white.p-2.rounded 로그아웃     
+    div.p-8.text-center.mt-4.flex.justify-between
+        span.text-2xl.font-bold(class="sm:text-4xl") 홈 화면 &#9996;&#127999;
+        button(onclick="location.href='/logout'").bg-blue-500.text-white.p-2.rounded.ml-4 로그아웃     
+    div.grid.grid-cols-1.gap-2(class='lg:grid-cols-4')
+        div.video-container.bg-gray-500.vh-85.text-2xl.text-center.p-4.m-2.rounded-lg.overflow-hidden(class='lg:col-span-3')
+            iframe(src="https://www.youtube.com/embed/oMcNUKInJAY?",width="100%" , frameborder="0", title="YouTube video player", allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture", allowfullscreen) 
+        div.bg-gray-500.p-4.m-2.rounded-lg.overflow-scroll.vh-85
+            table.bg-gray-50.text-center.rounded-lg
+                tr 
+                    td.text-2xl.py-2 Lorem ipsum
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, Nam porta lorem eleifend mauris lacinia luctus in id orci. Duis id eros turpis.
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
+                        tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
+                tr 
+                    td.px-3.mt-2
+                        div.text-xl.border-t-2.border-gray-700.pt-2  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et arcu tellus. In convallis tellus arcu, tincidunt elementum leo tincidunt ac.
 block scripts
